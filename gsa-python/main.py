@@ -112,9 +112,57 @@ def main():
     print(f"Mismatch: {MISMATCH_VAL}")
     print(f"Gap Penalty: {GAP_VAL}")
     print("--OUTPUT--")
-    print(seq1)
-    print(seq2)
+    print_alignment(seq1, seq2)
     print(f"Total Score: {score}")
+
+
+def print_alignment(seq1, seq2):
+    # grab constants for list manip
+    length = len(seq1)
+    beginning = 0
+    end = 50
+
+    # num base pairs iterated over for each strand
+    char1 = 1
+    char2 = 1
+
+    # print 50 lines of each seq at a time
+    while True:
+        # create temp lists
+        tmp1 = seq1[beginning : min(length, end)]
+        tmp2 = seq2[beginning : min(length, end)]
+
+        # compose lines
+        line1 = ""
+        line2 = ""
+        line3 = ""
+
+        for i in range(len(tmp1)):
+            line1 += tmp1[i]
+            line2 += tmp2[i]
+            # check for exact matches
+            if tmp1[i] == tmp2[i]:
+                line3 += "*"
+            else:
+                line3 += " "
+            # only add char if not a gap
+            if tmp1[i] != "-":
+                char1 += 1
+
+            if tmp2[i] != "-":
+                char2 += 1
+
+        # add traversed chars after each sequence line
+        line1 += f" |{char1}"
+        line2 += f" |{char2}"
+        print(line1)
+        print(line2)
+        print(line3)
+        # increase list indexes
+        beginning += 50
+        end += 50
+        if beginning > length:
+            break
 
 
 def handle_idx(col: int, row: int, vec):
